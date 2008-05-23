@@ -1,22 +1,0 @@
-8
-
-dir
-207
-svn://ini-indytest/steve/branches/FInalAutoFocus/vendor/plugins/endless_pageless/example_code/views
-svn://ini-indytest/steve
-
-
-
-2008-05-03T16:12:40.193705Z
-205
-cvannoy
-
-
-svn:special svn:externals svn:needs-lock
-
-layouts
-dir
-
-pageless
-dir
-
