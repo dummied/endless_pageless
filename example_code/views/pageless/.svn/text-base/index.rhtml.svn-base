@@ -1,0 +1,9 @@
+<%= pageless_navigation(@pages, @items) %>
+
+<dl id="items_list">
+	<%= render :partial => "item", :collection => @items %>	
+</dl>
+
+<%= pageless_navigation(@pages, @items) %>
+
+<%= index_tags(@pages, @items) %>

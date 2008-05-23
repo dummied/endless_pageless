@@ -1,0 +1,31 @@
+Endless Pageless allows you to more easily implement an unobtrusive pageless pagination effect in your views.
+
+At this time, it only provides a few convenience view helper methods and the requisite javascript (including a copy of 1.5 version of Prototype (http://www.prototypejs.org/) to upgrade some older versions of prototype tagging along with Rails ... your existing prototype version will be renamed prototype.bak just in case).
+
+The plugin also requires the presence of the paginating_find plugin (http://cardboardrocket.com/pages/paginating_find) to work properly. Because of the way paginating_find works (loading an Enumerator object that represents merely the pages ... instead of loading the items themselves) we also need to do a little gymnastics with our controller so we don't end up loading items repeatedly.
+
+Assuming you have all the requirements in place, your controller (gymnastics, meaning the @pages.to_a bit, included) should end up looking something like:
+
+ def your_action
+  if params[:page]
+    @pages = Item.find(:all, :page => {:size => 5, :current => params[:page].to_i})
+	@items = @pages.to_a
+  else
+    @pages = Item.find(:all, :page => {:size => 5, :current => 1})
+	@items = @pages.to_a
+  end
+  respond_to do |format|
+    format.html { } # your_action.rhtml
+    format.js { render :action => 'filler', :layout => false } #filler.rjs
+  end
+ end
+
+After that, you'll need a rhtml view that sets the page up and loads in the first batch of results in an id'd div and an rjs view that renders a partial with your new results and fills said id'd div. It's generally easiest (and makes the most sense) if the both views use the same partial to render that data, obviously. You can find example view code in the /example_code directory.
+
+Your rhtml view should also include the helper methods found in /lib/endless_pageless_helper.rb to provide the appropriate hooks for the javascript to do its magic. The pageless_navigation method is entirely optional, though it's what provides the fallback pagination for those visitors without javascript.
+
+Finally, if you're calling your javascript using javascript_include_tag :defaults, the core javascript file, paginator.js, should be automatically appended to that list. Otherwise, you'll need to add it to the page yourself. 
+
+Again, you can find some example code in /example_code.
+
+Comments/questions/complaints should be directed to dummied+endless@gmail.com.
